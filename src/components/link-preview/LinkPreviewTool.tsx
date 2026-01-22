@@ -84,12 +84,6 @@ export default function LinkPreviewTool() {
 
   const tabsScrollRef = useRef<HTMLDivElement | null>(null);
 
-
-
-  const scrollTabsBy = (dx: number) => {
-    tabsScrollRef.current?.scrollBy({ left: dx, behavior: "smooth" });
-  };
-
   useEffect(() => {
     const root = tabsScrollRef.current;
     if (!root) return;
