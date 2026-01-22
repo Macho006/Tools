@@ -362,6 +362,7 @@ export default function LinkPreviewTool() {
             <div className="mt-6 text-center text-xs text-white/50">
               Preview is an approximation.
             </div>
+            hello
           </CardContent>
         </Card>
 
