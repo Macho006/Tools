@@ -11,11 +11,7 @@ function pickFirst(...vals: Array<string | null | undefined>) {
 export function normalizeUrl(input: string) {
   const t = (input ?? "").trim();
   if (!t) return "";
-
-  // agar /Macho006/... bo‘lsa github.com deb hisoblaymiz (sizning misolingizga mos)
   if (t.startsWith("/")) return `https://github.com${t}`;
-
-  // github.com/... yoki boshqa domen protokolsiz bo‘lsa https:// qo‘shamiz
   if (!/^https?:\/\//i.test(t)) return `https://${t}`;
 
   return t;
@@ -73,25 +69,17 @@ async function fetchText(url: string, signal?: AbortSignal) {
   return await res.text();
 }
 
-/**
- * Frontend-only:
- * - direct fetch ko‘p saytda CORS sabab ishlamaydi
- * - shuning uchun proxy (AllOrigins)ni birinchi urinamiz
- */
 export async function fetchMetaFrontend(inputUrl: string, signal?: AbortSignal): Promise<Meta> {
   const u = normalizeUrl(inputUrl);
-  if (!u) throw new Error("URL bo‘sh");
+  if (!u) throw new Error("URL is empty");
 
-  // 1) proxy (ko‘proq ishlaydi)
   try {
     const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`;
     const html = await fetchText(proxy, signal);
     return parseOgFromHtml(html, u);
   } catch {
-    // fallback
   }
 
-  // 2) direct (CORS bo‘lsa)
   const html = await fetchText(u, signal);
   return parseOgFromHtml(html, u);
 }

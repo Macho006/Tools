@@ -59,20 +59,15 @@ export default function LinkPreviewTool() {
 
   const [platform, setPlatform] = useState<Platform>("telegram");
 
-  // Draft input (user typing)
   const [urlInput, setUrlInput] = useState(initialUrl);
 
-  // Active URL (last fetched) — preview uses this so it doesn't "jump" while typing
   const [activeUrl, setActiveUrl] = useState(() => normalizeUrl(initialUrl));
 
-  // Manual override
   const [manualEnabled, setManualEnabled] = useState(false);
 
-  // States
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Data
   const [fetched, setFetched] = useState<Meta>(() => {
     const u = normalizeUrl(initialUrl);
     return u ? { url: u, domain: domainFromUrl(u), title: "", description: "", image: "" } : EMPTY_META;
@@ -80,7 +75,6 @@ export default function LinkPreviewTool() {
 
   const [manual, setManual] = useState<Manual>({ title: "", description: "", image: "" });
 
-  // Perf tools
   const abortRef = useRef<AbortController | null>(null);
   const cacheRef = useRef<Map<string, { meta: Meta; ts: number }>>(new Map());
 
@@ -88,7 +82,6 @@ export default function LinkPreviewTool() {
   const draftDomain = useMemo(() => (normalizedDraft ? domainFromUrl(normalizedDraft) : ""), [normalizedDraft]);
   const canFetch = !!normalizedDraft && !loading;
 
-  // Tabs scroll (professional UX)
   const tabsScrollRef = useRef<HTMLDivElement | null>(null);
 
 
@@ -97,7 +90,6 @@ export default function LinkPreviewTool() {
     tabsScrollRef.current?.scrollBy({ left: dx, behavior: "smooth" });
   };
 
-  // When platform changes -> auto bring active tab into view
   useEffect(() => {
     const root = tabsScrollRef.current;
     if (!root) return;
@@ -109,15 +101,12 @@ export default function LinkPreviewTool() {
     const u = normalizedDraft;
     if (!u) return;
 
-    // Preview becomes this URL (so user instantly feels it changed)
     setActiveUrl(u);
 
-    // Cache (TTL 10 min)
     const cached = cacheRef.current.get(u);
     if (cached && Date.now() - cached.ts < 10 * 60 * 1000) {
       setFetched(cached.meta);
       setError("");
-      // prep manual with cached values
       setManual({
         title: cached.meta.title || "",
         description: cached.meta.description || "",
@@ -126,14 +115,12 @@ export default function LinkPreviewTool() {
       return;
     }
 
-    // Abort old request
     abortRef.current?.abort();
     abortRef.current = new AbortController();
 
     setLoading(true);
     setError("");
 
-    // optimistic domain
     setFetched((prev) => ({
       ...prev,
       url: u,
@@ -146,7 +133,6 @@ export default function LinkPreviewTool() {
       setFetched(meta);
       cacheRef.current.set(u, { meta, ts: Date.now() });
 
-      // keep manual in sync so user can toggle ON and edit instantly
       setManual({
         title: meta.title || "",
         description: meta.description || "",
@@ -218,7 +204,6 @@ export default function LinkPreviewTool() {
           </CardHeader>
 
           <CardContent className="space-y-5">
-            {/* URL + Button (responsive) */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="text-xs text-white/60">Website URL</div>
@@ -274,7 +259,6 @@ export default function LinkPreviewTool() {
 
             <Separator className="bg-white/10" />
 
-            {/* Manual */}
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <div className="text-sm font-medium">Manual override</div>
@@ -360,17 +344,11 @@ export default function LinkPreviewTool() {
           </CardHeader>
 
           <CardContent className="p-4 sm:p-6">
-            {/* SCROLLABLE CONTAINER (O'ZGARISH SHU YERDA) 
-                1. h-[500px] sm:h-[600px] -> Aniq balandlik berdik.
-                2. overflow-y-auto -> Sig'magan content scroll bo'ladi.
-            */}
             <div className="
               relative w-full
               h-[500px] sm:h-[600px] 
               overflow-y-auto overflow-x-hidden
-              rounded-2xl border border-white/5 bg-black/10
-            ">
-              {/* Inner Wrapper: Kichik kontentni o'rtaga joylaydi, kattasini esa tepadan boshlaydi */}
+              rounded-2xl border border-white/5 bg-black/10">
               <div className="min-h-full w-full flex items-center justify-center p-4">
                 <AnimatePresence mode="wait">
                   <motion.div
