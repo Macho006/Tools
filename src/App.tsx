@@ -1,11 +1,11 @@
-import './App.css'
+import LinkPreviewTool from "./components/link-preview/LinkPreviewTool";
 
-function App() {
+export default function App() {
   return (
-    <>
-    <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente cumque tempore facilis vero magni minus doloribus excepturi dolorem, minima accusantium amet voluptatum quasi voluptatem maiores vel? Fugiat consectetur est fugit nemo ullam optio quas velit at, iusto facilis maiores amet numquam quae. Laboriosam quasi delectus perferendis, libero excepturi id labore!</h1>
-    </>
-  )
+    <div className="min-h-screen bg-[#050505] text-white">
+      <div className="mx-auto max-w-6xl px-6 py-8">
+        <LinkPreviewTool />
+      </div>
+    </div>
+  );
 }
-
-export default App
