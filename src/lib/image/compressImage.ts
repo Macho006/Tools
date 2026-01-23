@@ -1,9 +1,8 @@
-import { CompressionSettings, ImageMeta } from "@/types/compressor";
+import type { CompressionSettings, ImageMeta } from "../../types/compressor";
 import { extFromMime, pickOutputMime } from "./mime";
 
 function canvasToBlob(canvas: HTMLCanvasElement, mime: string, quality01: number): Promise<Blob> {
   return new Promise((resolve, reject) => {
-    // PNG uchun quality browserda ignore bo'lishi mumkin — bu normal
     canvas.toBlob(
       (b) => (b ? resolve(b) : reject(new Error("toBlob failed"))),
       mime,
@@ -40,8 +39,6 @@ export async function compressImage(
     height = img.naturalHeight;
     URL.revokeObjectURL(url);
 
-    // Image -> ImageBitmap bo'lmasa canvasga imgni chizamiz
-    // (pastda bmp bo'lmasa img kerak bo'lardi, shuning uchun yana decode qilmaslik uchun)
     const canvas = document.createElement("canvas");
     const maxW = settings.maxWidth === 0 ? width : Math.min(width, settings.maxWidth);
     const scale = maxW / width;
