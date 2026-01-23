@@ -22,7 +22,7 @@ export default function ImageCompressorPage() {
   } = useImageCompressor();
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="bg-black">
       <div className="pointer-events-none fixed inset-0 opacity-60">
         <div className="absolute left-1/2 top-[-120px] h-[380px] w-[900px] -translate-x-1/2 rounded-full" />
       </div>
