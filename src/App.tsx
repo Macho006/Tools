@@ -1,6 +1,7 @@
 import Page from "./app/page";
 import ImageCompressorPage from "./components/compressor/ImageCompressorPage";
 import LinkPreviewTool from "./components/link-preview/LinkPreviewTool";
+import Merge from "./components/merge-pdf/merge";
 
 export default function App() {
   return (
@@ -9,6 +10,7 @@ export default function App() {
         <LinkPreviewTool />
         <Page />
         <ImageCompressorPage />
+        <Merge />
       </div>
     </div>
   );
